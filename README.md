@@ -1,4 +1,9 @@
 # WeatherApplication
-Utilize 3rd party API’s to create a weather app, that can take a city name and displays the latest weather and Weather Trends.
+Weather application powered by [OpenWeatherMap](https://openweathermap.org/)
 
-### aowiejf
+## API Setup
+In order to use OpenWeatherMap services you must sign up and create an API key,
+
+> https://home.openweathermap.org/users/sign_up
+
+That API key is specified in the environment variable: `OPENWEATHERMAP_APIKEY`
