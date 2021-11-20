@@ -2,40 +2,51 @@ import './App.css';
 import { useEffect, useRef, useState } from 'react';
 import WeatherCard from './weather_card';
 
+// set this to true when debugging on nodejs server
 const DEBUG_MODE = true;
 
 function App() {
   // reference output text
   const cardListContainer = useRef(null);
+  // list of cards
   const [cards, setCards] = useState([]);
+  
+  // When set to true, searchbox is disabled
   const [searchDisabled, setSearchDisabled] = useState(false);
   
+  // reference to search textbox
   const searchBox = useRef(null);
   
-  // Refocus search box after result loads
+  // Refocus search box after result loads and searchbox is re-enabled
   useEffect(()=>{
     if (!searchDisabled) {
       searchBox.current.focus();
     }
   },[searchDisabled]);
+  
 
   return (
     <div className="App">
+      {/* Title */}
       <h1>
         Weather Application
           {DEBUG_MODE &&
             " DEBUG"
           }
       </h1>
+
+      {/* Search box */}
       <input ref={searchBox} onKeyPress={(e)=>searchCity(e)} disabled={searchDisabled} />
       <p style={{marginTop: '2px', color: 'gray'}}>Enter a city and press ENTER</p>
+
 
       <button onClick={()=>{
           setCards([])
         }}>Clear</button>
+
       <br/><br/>
      
-      {/* card list container */}
+      {/* Card list container */}
       <div className='CardListContainer' ref={cardListContainer}>
         
         
@@ -49,10 +60,6 @@ function App() {
             return (
               <WeatherCard mode='result'
                 json={v}
-                // cityName={v['name']}
-                // temperature={Number.parseInt(Number.parseFloat(v['main']['temp']))}
-                // low={Number.parseInt(Number.parseFloat(v['main']['temp_min']))}
-                // high={Number.parseInt(Number.parseFloat(v['main']['temp_max']))}
               />
             );
           }
@@ -117,6 +124,8 @@ function App() {
       
     }
   }
+
+  // create loading card while client waits for response from server
   function createCard() {
     setCards([null,...cards]);
   }

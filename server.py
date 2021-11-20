@@ -15,7 +15,7 @@ API_KEY = os.environ.get('OPENWEATHERMAP_APIKEY')
 
 def get_weather_for(city):
     """
-    Function for obtaining current temperature of city
+    Function for obtaining current weather of city using OpenWeatherMap
     """
 
     # make request to openweathermap.org
@@ -24,6 +24,7 @@ def get_weather_for(city):
         'units': 'imperial',
         'appid': API_KEY
     }
+
     return requests.get('https://api.openweathermap.org/data/2.5/weather', params=params)
 
 app = Flask(__name__, static_folder='./weatherapplicationclient/build')
@@ -31,7 +32,7 @@ app = Flask(__name__, static_folder='./weatherapplicationclient/build')
 # handle requests for the weather of a city
 @app.route('/api/weather/city', methods=['GET', 'OPTIONS'])
 def api_weather_city():
-    """when user navigates to /api/weather/city handle HTTP GET requests containing city name"""
+    """When user navigates to /api/weather/city, handle HTTP GET requests containing city name"""
 
     # CORS (Allows instances of client from other servers to use this server)
     if request.method == 'OPTIONS':
@@ -59,7 +60,8 @@ def api_weather_city():
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response, 400
 
-        # forward response and status to client
+        # Client sent a valid request,
+        # forward response from OpenWeatherMap and status to client
         result = get_weather_for(data['city'])
 
         if result.status_code == 401:
@@ -77,6 +79,7 @@ def api_weather_city():
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response, result.status_code
 
+# for serving index.html
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>/')
 def index(path):
