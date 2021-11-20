@@ -5,7 +5,8 @@ Naqeeb Rehman - 11/19/2021
 import os # for environment variables
 from flask import Flask
 from flask import jsonify # for converting dict to json strings
-from flask import request # for parsing GET requests
+from flask import request
+from flask.helpers import send_from_directory # for parsing GET requests
 import requests
 
 # try obtaining api key:
@@ -20,12 +21,12 @@ def get_weather_for(city):
     # make request to openweathermap.org
     params = {
         'q': city,
+        'units': 'imperial',
         'appid': API_KEY
     }
     return requests.get('https://api.openweathermap.org/data/2.5/weather', params=params)
 
-
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./weatherapplicationclient/build')
 
 # REST API:
 @app.route('/api/weather/city', methods=['GET'])
@@ -52,17 +53,17 @@ def api_weather_city():
             # forward response & status code to client
             return response.text, response.status_code
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'path': 'index.html'})
+@app.route('/<path:path>/')
+def index(path):
     """Main React landing page"""
-
-    return 'Index.html'
+    print("trying to get " + path)
+    return send_from_directory('./weatherapplicationclient/build', path)
 
 @app.errorhandler(404)
 # pylint: disable=invalid-name,unused-argument
 def page_not_found(e):
     """Handle 404 errors"""
-
     return '<h1>404</h1> <p>Requested file or resource was not found :(</p>', 404
 
 if __name__ == '__main__':
