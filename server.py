@@ -3,6 +3,7 @@ WeatherApplication Server power by OpenWeatherMap
 Naqeeb Rehman - 11/19/2021
 """
 import os # for environment variables
+import json # for parsing json (not the same as flask.jsonify)
 from flask import Flask
 from flask import jsonify # for converting dict to json strings
 from flask import request
@@ -12,6 +13,10 @@ import requests
 # try obtaining api key:
 API_KEY = os.environ.get('OPENWEATHERMAP_APIKEY')
 
+def get_counter_for(city):
+    """Retrieves from database, number of times given city was searched"""
+    #todo: implement this
+    return 10
 
 def get_weather_for(city):
     """
@@ -60,7 +65,7 @@ def api_weather_city():
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response, 400
 
-        # Client sent a valid request,
+        #* Client sent a valid request,
         # forward response from OpenWeatherMap and status to client
         result = get_weather_for(data['city'])
 
@@ -73,10 +78,17 @@ def api_weather_city():
             result.headers.add('Access-Control-Allow-Origin', '*')
             return result, 404
         else:
-            # forward response & status code to client
+            # forward response, counter & status code to client
+
+            # we want to add counter to JSON code but response from
+            # OpenWeatherMap is in string format. Parse json string:
+            parsed = json.loads(result.text)
+            parsed['COUNTER'] = get_counter_for(data['city']) # add counter to json
+
             response = make_response()
-            response.data = result.text
-            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.data = json.dumps(parsed)
+            response.headers.add('Access-Control-Allow-Origin', '*') # CORS support
+
             return response, result.status_code
 
 # for serving index.html

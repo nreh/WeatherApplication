@@ -1,6 +1,5 @@
 import './weather_card.css';
 import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
 
 function WeatherCard(props) {
 
@@ -30,7 +29,9 @@ function WeatherCard(props) {
                         <span>{props.json['sys']['country']}</span>
 
                         {/* Counter */}
-                        <span className='counter'>0</span>
+                        <span className='counter'>
+                            {props.json['COUNTER']}
+                        </span>
                     </div>
                 </div>
             </div>

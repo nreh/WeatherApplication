@@ -1,0 +1,1 @@
+web: cd weatherapplicationclient/ && npm run build && cd .. && python server.py
