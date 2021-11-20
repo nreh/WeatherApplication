@@ -6,7 +6,7 @@ import os # for environment variables
 from flask import Flask
 from flask import jsonify # for converting dict to json strings
 from flask import request
-from flask.helpers import send_from_directory # for parsing GET requests
+from flask.helpers import make_response, send_from_directory # for parsing GET requests
 import requests
 
 # try obtaining api key:
@@ -28,30 +28,54 @@ def get_weather_for(city):
 
 app = Flask(__name__, static_folder='./weatherapplicationclient/build')
 
-# REST API:
-@app.route('/api/weather/city', methods=['GET'])
+# handle requests for the weather of a city
+@app.route('/api/weather/city', methods=['GET', 'OPTIONS'])
 def api_weather_city():
     """when user navigates to /api/weather/city handle HTTP GET requests containing city name"""
 
+    # CORS (Allows instances of client from other servers to use this server)
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add('Access-Control-Allow-Headers', "*")
+        response.headers.add('Access-Control-Allow-Methods', "*")
+        return response
+
+
     if API_KEY is None: # no API_KEY specified
-        return jsonify({'error': 'Server does not have an API key set up'}), 500
+        response = jsonify({'error': 'Server does not have an API key set up'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 500
 
     data = request.args
 
     if 'city' not in data: # no city param in request
-        return jsonify({'error': 'No city specified'}), 400
+        response = jsonify({'error': 'No city specified'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     else:
         if data['city'].strip() == '': # city param exists but is empty
-            return jsonify({'error': 'No city specified'}), 400
+            response = jsonify({'error': 'No city specified'})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 400
 
         # forward response and status to client
-        response = get_weather_for(data['city'])
+        result = get_weather_for(data['city'])
 
-        if response.status_code == 401:
-            return jsonify({'error': 'Server has invalid API key set up'}), 500
+        if result.status_code == 401:
+            result = jsonify({'error': 'Server has invalid API key set up'})
+            result.headers.add('Access-Control-Allow-Origin', '*')
+            return result, 401
+        elif result.status_code == 404:
+            result = jsonify({'error': 'City not found'})
+            result.headers.add('Access-Control-Allow-Origin', '*')
+            return result, 404
         else:
             # forward response & status code to client
-            return response.text, response.status_code
+            response = make_response()
+            response.data = result.text
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, result.status_code
 
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>/')

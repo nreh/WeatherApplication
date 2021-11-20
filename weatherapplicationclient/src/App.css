@@ -18,6 +18,10 @@ input {
   transition: box-shadow .2s;
 }
 
+div.CardListContainer {
+  display: inline-block;
+}
+
 input:focus {
   outline: none;
   box-shadow: 0 2px 10px #0000007e;
