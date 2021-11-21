@@ -1,6 +1,6 @@
 """
 WeatherApplication Server power by OpenWeatherMap
-Naqeeb Rehman - 11/19/2021
+Naqeeb Rehman
 """
 import os # for environment variables
 import json # for parsing json (not the same as flask.jsonify)
