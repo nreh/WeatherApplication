@@ -33,7 +33,7 @@ function WeatherCard(props) {
                         {/* Counter */}
                         {props.json['COUNTER'] !== '' &&
                         
-                            <span data-tip="How many times this city was searched" className='counter'>
+                            <span data-tip="How many times this city was searched before you" className='counter'>
                                 {props.json['COUNTER']}
                             </span>
                             
