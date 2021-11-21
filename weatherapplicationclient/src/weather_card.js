@@ -19,7 +19,7 @@ function WeatherCard(props) {
     } else if (props.mode === 'result') {
         return (
             <div className='WeatherCard'>
-                <ReactTooltip />
+                <ReactTooltip border={true} />
                 <div className='temp'>
                     <span data-tip='Temperature displayed in Fahrenheit' style={{marginTop: '-20px', marginLeft: '-70px'}} >°F</span>
                     <h1>{Number.parseInt(Number.parseFloat(props.json['main']['temp']))}</h1>

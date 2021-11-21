@@ -38,6 +38,7 @@ function App() {
       {/* Search box */}
       <input ref={searchBox} onKeyPress={(e)=>searchCity(e)} disabled={searchDisabled} />
       <p style={{marginTop: '2px', color: 'gray'}}>Enter a city and press ENTER</p>
+      <p>Hover over card elements for information on what they do</p>
 
 
       <button onClick={()=>{
