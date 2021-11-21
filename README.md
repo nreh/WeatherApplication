@@ -27,3 +27,13 @@ The client and server are both hosted on Flask. Here are the following commands 
  - `npm install`
  - `npm run-script build`
  - `python server.py`
+
+## Docker
+Alternatively, you can pull & run a docker image:
+```
+docker run \
+  -e OPENWEATHERMAP_APIKEY=YOUR_API_KEY \
+  -e DATABASE_URL=YOUR_DATABASE_URL \
+  -p YOUR_PORT:5000 \
+  nreh/weatherapplication
+```
