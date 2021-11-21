@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 RUN apt-get update
-RUN apt-get install -y npm nodejs
+RUN apt-get install -y npm nodejs libpq-dev gcc
 
 RUN pip install -r requirements.txt
 

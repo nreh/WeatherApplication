@@ -1,4 +1,4 @@
 Flask
 requests
-flask_sqlalchemyOPENWEATHERMAP_APIKEY
+flask_sqlalchemy
 psycopg2
