@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import WeatherCard from './weather_card';
 
 // set this to true when debugging on nodejs server
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 function App() {
   // reference output text
