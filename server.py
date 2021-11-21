@@ -55,6 +55,8 @@ def get_counter_for(city):
     return getattr(co, counter.count.key)
 
 def increment_counter_for(city):
+    if DATABASE_URL == None: return
+    
     co = counter.query.filter_by(city=city).first()
     co.count += 1
     db.session.commit()

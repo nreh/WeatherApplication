@@ -1,5 +1,6 @@
 import './weather_card.css';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 function WeatherCard(props) {
 
@@ -18,20 +19,26 @@ function WeatherCard(props) {
     } else if (props.mode === 'result') {
         return (
             <div className='WeatherCard'>
+                <ReactTooltip />
                 <div className='temp'>
-                    <span style={{marginTop: '-20px', marginLeft: '-70px'}} >°F</span>
+                    <span data-tip='Temperature displayed in Fahrenheit' style={{marginTop: '-20px', marginLeft: '-70px'}} >°F</span>
                     <h1>{Number.parseInt(Number.parseFloat(props.json['main']['temp']))}</h1>
-                    <h3>{Number.parseInt(Number.parseFloat(props.json['main']['temp_min']))}/{Number.parseInt(Number.parseFloat(props.json['main']['temp_max']))}</h3>
+                    <h3 data-tip="Low/High">{Number.parseInt(Number.parseFloat(props.json['main']['temp_min']))}/{Number.parseInt(Number.parseFloat(props.json['main']['temp_max']))}</h3>
                 </div>
                 <div className='details'>
                     <div>
                         <h2 style={{display:'inline-block', marginRight: '10px'}}>{props.json['name']}</h2>
-                        <span>{props.json['sys']['country']}</span>
+                        <span data-tip="Country code">{props.json['sys']['country']}</span>
 
                         {/* Counter */}
-                        <span className='counter'>
-                            {props.json['COUNTER']}
-                        </span>
+                        {props.json['COUNTER'] !== '' &&
+                        
+                            <span data-tip="How many times this city was searched" className='counter'>
+                                {props.json['COUNTER']}
+                            </span>
+                            
+                        }
+                        
                     </div>
                 </div>
             </div>

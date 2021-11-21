@@ -4,6 +4,8 @@
 }
 
 div.WeatherCard {
+    user-select: none;
+
     height: 120px;
     width: 500px;
 
@@ -67,6 +69,8 @@ div.details > div > span.counter {
 
 
 div.WeatherCardLoading {
+    user-select: none;
+
     height: 120px;
     width: 500px;
 
@@ -93,6 +97,8 @@ div.WeatherCardLoading > img {
 }
 
 div.WeatherCardError {
+    user-select: none;
+
     height: 120px;
     width: 500px;
 
