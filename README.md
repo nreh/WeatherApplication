@@ -5,7 +5,7 @@ Weather application powered by [OpenWeatherMap](https://openweathermap.org/)
 
 *Note http instead of https*
 
-## API Setup
+## OpenWeatherMap API Key
 In order to use OpenWeatherMap services you must sign up and create an API key,
 
 > https://home.openweathermap.org/users/sign_up
@@ -26,6 +26,7 @@ The client and server are both hosted on Flask. Here are the following commands 
 
  - `npm install`
  - `npm run-script build`
+ - `pip install -r requirements.txt`
  - `python server.py`
 
 ## Docker
@@ -37,3 +38,10 @@ docker run \
   -p YOUR_PORT:5000 \
   nreh/weatherapplication
 ```
+
+## Files/Folders
+ - `./server.py`: Flask server that serves the webpage and handles weather api requests
+ - `./weatherapplicationclient/`: Directory containing react source code and node_modules
+ - `./weatherapplicationclient/src/App.js`: Contains code for main page and logic
+ - `./weatherapplicationclient/src/weather_card.js`: Contains code for rending cards containing temperature/forecast
+ - `./weatherapplicationclient/src/hourly_forecast.js`: Contains code for rendering forecast for a specific date/hour
