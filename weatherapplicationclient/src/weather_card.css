@@ -6,8 +6,8 @@
 div.WeatherCard {
     user-select: none;
 
-    height: 120px;
-    width: 500px;
+    height: 180px;
+    width: 550px;
 
     display: flex;
 
@@ -31,7 +31,7 @@ div.WeatherCard {
 div.temp {
     margin: 0;
     width: 100px;
-    height: 120px;
+    height: 180px;
     background-color:white;
     color: black;
     
@@ -71,8 +71,8 @@ div.details > div > span.counter {
 div.WeatherCardLoading {
     user-select: none;
 
-    height: 120px;
-    width: 500px;
+    height: 180px;
+    width: 550px;
 
     display: flex;
 
@@ -99,8 +99,8 @@ div.WeatherCardLoading > img {
 div.WeatherCardError {
     user-select: none;
 
-    height: 120px;
-    width: 500px;
+    height: 180px;
+    width: 550px;
 
     display: flex;
 
@@ -121,4 +121,16 @@ div.WeatherCardError {
     justify-content: center;
 
     animation: fadeIn 0.5s;
+}
+
+div.HourlyForecastContainer {
+    display:flex;
+    height: 75px;
+}
+
+div.HFCC {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:120px;
 }

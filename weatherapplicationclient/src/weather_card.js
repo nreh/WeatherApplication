@@ -1,6 +1,7 @@
 import './weather_card.css';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
+import HourlyForecast from './hourly_forecast';
 
 function WeatherCard(props) {
 
@@ -40,6 +41,18 @@ function WeatherCard(props) {
                         }
                         
                     </div>
+
+                    {/* Hourly Forecast */}
+                    <div className='HFCC'>
+                        <div className='HourlyForecastContainer'>
+                            {props.json['hourly'].slice(0, Math.min(props.json['hourly'].length, 5)).map((v,i)=>{
+                                return (
+                                    <HourlyForecast json={props.json['hourly'][i]} />
+                                );
+                            })}
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         );

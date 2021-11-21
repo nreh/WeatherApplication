@@ -75,6 +75,21 @@ def get_weather_for(city):
 
     return requests.get('https://api.openweathermap.org/data/2.5/weather', params=params)
 
+def get_hourly(lat, lon):
+    """Once longitude & latitude of city is determined, this function
+    will retrieve hourly forecast using one-call in a JSON format"""
+
+    params = {
+        'lat': lat,
+        'lon': lon,
+        'exclude': 'current,minutely,daily,alerts',
+        'units': 'imperial',
+        'appid': API_KEY
+    }
+
+    response = requests.get('https://api.openweathermap.org/data/2.5/onecall', params=params)
+    hourly = json.loads(response.text)['hourly']
+    return hourly
 
 # handle requests for the weather of a city
 @app.route('/api/weather/city', methods=['GET', 'OPTIONS'])
@@ -89,54 +104,63 @@ def api_weather_city():
         response.headers.add('Access-Control-Allow-Methods', "*")
         return response
 
+    try:
+        if API_KEY is None: # no API_KEY specified
+            response = jsonify({'error': 'Server does not have an API key set up'})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 500
 
-    if API_KEY is None: # no API_KEY specified
-        response = jsonify({'error': 'Server does not have an API key set up'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 500
+        data = request.args
 
-    data = request.args
-
-    if 'city' not in data: # no city param in request
-        response = jsonify({'error': 'No city specified'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 400
-    else:
-        if data['city'].strip() == '': # city param exists but is empty
+        if 'city' not in data: # no city param in request
             response = jsonify({'error': 'No city specified'})
             response.headers.add('Access-Control-Allow-Origin', '*')
             return response, 400
-
-        #*******************************
-        #* Client sent a valid request *
-        #*******************************
-
-        # forward response from OpenWeatherMap and status to client
-        result = get_weather_for(data['city'])
-
-        if result.status_code == 401:
-            result = jsonify({'error': 'Server has invalid API key set up'})
-            result.headers.add('Access-Control-Allow-Origin', '*')
-            return result, 401
-        elif result.status_code == 404:
-            result = jsonify({'error': 'City not found'})
-            result.headers.add('Access-Control-Allow-Origin', '*')
-            return result, 404
         else:
-            # forward response, counter & status code to client
+            if data['city'].strip() == '': # city param exists but is empty
+                response = jsonify({'error': 'No city specified'})
+                response.headers.add('Access-Control-Allow-Origin', '*')
+                return response, 400
 
-            # we want to add counter to JSON code but response from
-            # OpenWeatherMap is in string format. Parse json string:
-            parsed = json.loads(result.text)
-            parsed['COUNTER'] = get_counter_for(data['city']) # add counter to json
+            #*******************************
+            #* Client sent a valid request *
+            #*******************************
 
-            increment_counter_for(data['city']) # also increment that counter
+            # forward response from OpenWeatherMap and status to client
+            result = get_weather_for(data['city'])
 
-            response = make_response()
-            response.data = json.dumps(parsed)
-            response.headers.add('Access-Control-Allow-Origin', '*') # CORS support
+            if result.status_code == 401:
+                result = jsonify({'error': 'Server has invalid API key set up'})
+                result.headers.add('Access-Control-Allow-Origin', '*')
+                return result, 401
+            elif result.status_code == 404:
+                result = jsonify({'error': 'City not found'})
+                result.headers.add('Access-Control-Allow-Origin', '*')
+                return result, 404
+            else:
+                # forward response, counter & status code to client
 
-            return response, result.status_code
+                # we want to add counter to JSON code but response from
+                # OpenWeatherMap is in string format. Parse json string:
+                parsed = json.loads(result.text)
+                parsed['COUNTER'] = get_counter_for(data['city']) # add counter to json
+
+                increment_counter_for(data['city']) # also increment that counter
+
+                # we also want to add hourly forecast to the JSON. This will require
+                # a separate request using longitude/lattitude which we will extract
+                # from the previous result:
+                parsed['hourly'] = get_hourly(parsed['coord']['lat'], parsed['coord']['lon'])
+                
+
+                response = make_response()
+                response.data = json.dumps(parsed)
+                response.headers.add('Access-Control-Allow-Origin', '*') # CORS support
+
+                return response, result.status_code
+    except Exception:
+        err_response = jsonify({'error': 'Server exception'})
+        return err_response, 500
 
 # for serving index.html
 @app.route('/', defaults={'path': 'index.html'})
