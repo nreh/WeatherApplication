@@ -2,7 +2,13 @@ import './App.css';
 import { useEffect, useRef, useState } from 'react';
 import WeatherCard from './weather_card';
 
-// set this to true when debugging on nodejs server
+/**
+    Set this to true when debugging on nodejs server
+    this will ensure that instead of directing requests back to the server,
+    the client will direct requests to localhost:5000 which is what the 
+    flask server will be running on. This will let us develop and see code
+    without having to constantly build.
+ */
 const DEBUG_MODE = false;
 
 function App() {
@@ -27,7 +33,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* Title */}
+      {/* Title (show DEBUG when debug mode is enabled) */}
       <h1>
         Weather Application
           {DEBUG_MODE &&
@@ -49,23 +55,21 @@ function App() {
      
       {/* Card list container */}
       <div className='CardListContainer' ref={cardListContainer}>
-        
-        
         {cards.map((v,i) => {
           if (v == null) {
-            return <WeatherCard mode='loading' />
+            return <WeatherCard mode='loading' /> // no json data, show loading card
           } else if (v['CARD_TYPE'] === 'error') {
-            return <WeatherCard mode='error' errMsg={v['error']} />
+            return <WeatherCard mode='error' errMsg={v['error']} /> // json data contains error, show error card
           } else {
-            console.log(v);
             return (
-              <WeatherCard mode='result'
+              <WeatherCard mode='result' // json data contains weather information, show result card
                 json={v}
               />
             );
           }
         })}
       </div>
+
     </div>
   );
 

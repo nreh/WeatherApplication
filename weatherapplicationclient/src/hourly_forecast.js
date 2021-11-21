@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './hourly_forecast.css';
 
 function HourlyForecast(props) {
-    // extract relevant information:
+    // extract relevant information from props.json:
     var dt = props.json['dt'];
     var temp = props.json['temp'];
 

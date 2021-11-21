@@ -5,6 +5,8 @@ import HourlyForecast from './hourly_forecast';
 
 function WeatherCard(props) {
 
+    // Depending on props.mode, render a loading, error, or result card.
+    
     if (props.mode === 'loading') {
         return (
             <div className='WeatherCardLoading'>
@@ -57,10 +59,7 @@ function WeatherCard(props) {
             </div>
         );
     }
-    
-    
 }
-
 
 WeatherCard.propTypes = {
     mode: PropTypes.oneOf(['loading', 'error', 'result']),
