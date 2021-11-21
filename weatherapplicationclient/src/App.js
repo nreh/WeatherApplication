@@ -117,7 +117,7 @@ function App() {
         j['CARD_TYPE'] = 'error';
         j['error'] = 'Error communicating with server';
 
-        console(e);
+        console.log(e);
 
         // update first card
         setCards([j,...cards]);
