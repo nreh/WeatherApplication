@@ -2,7 +2,6 @@
 WeatherApplication Server power by OpenWeatherMap
 Naqeeb Rehman - 11/19/2021
 """
-from enum import unique
 import os # for environment variables
 import json # for parsing json (not the same as flask.jsonify)
 from flask import Flask
@@ -18,7 +17,7 @@ app = Flask(__name__, static_folder='./weatherapplicationclient/build')
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-if DATABASE_URL == None:
+if DATABASE_URL is None:
     print("No database")
 else:
     if DATABASE_URL.startswith('postgres://'):

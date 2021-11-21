@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import WeatherCard from './weather_card';
 
 // set this to true when debugging on nodejs server
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 function App() {
   // reference output text
@@ -69,6 +69,7 @@ function App() {
     </div>
   );
 
+  /** Run when user presses a key while typing in the searchbox */
   function searchCity(e) {
     if (e.key === 'Enter') {
       var city = e.target.value;
@@ -126,7 +127,7 @@ function App() {
     }
   }
 
-  // create loading card while client waits for response from server
+  /** create loading card while client waits for response from server */
   function createCard() {
     setCards([null,...cards]);
   }
