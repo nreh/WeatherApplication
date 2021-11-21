@@ -106,4 +106,5 @@ def page_not_found(e):
     return '<h1>404</h1> <p>Requested file or resource was not found :(</p>', 404
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
