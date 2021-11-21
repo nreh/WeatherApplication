@@ -13,4 +13,17 @@ In order to use OpenWeatherMap services you must sign up and create an API key,
 That API key is specified in the environment variable: `OPENWEATHERMAP_APIKEY`
 
 ## Database
-Set `DATABASE_URL` to database URL
+This application stores how many times cities were searched. For this feature, a database URL must be specified in the `DATABASE_URL` environment variable.
+
+## Dependencies
+
+ - NodeJS
+ - Python 3
+
+## Setup
+The client and server are both hosted on Flask. Here are the following commands to run:
+(in root folder)
+
+ - `npm install`
+ - `npm run-script build`
+ - `python server.py`
